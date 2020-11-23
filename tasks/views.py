@@ -7,7 +7,7 @@ from .forms import *
 
 def index(request):
     tasks = Task.objects.all().order_by('id')
-
+    ids = Task.objects.values_list('id')
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
@@ -15,12 +15,13 @@ def index(request):
         return redirect('/')
 
     form = TaskForm()
-    context = {'tasks': tasks, 'form': form, 'l': list(tasks)}
-    return render(request, 'tasks/basic.html', context)
+    context = {'tasks': tasks, 'form': form, 'ids': ids}
+    return render(request, 'tasks/index.html', context)
 
 
 def update_task(request, pk):
     task = Task.objects.get(id=pk)
+    tasks = Task.objects.all().order_by('id')
 
     form = TaskForm(instance=task)
 
@@ -30,7 +31,7 @@ def update_task(request, pk):
             form.save()
             return redirect('/')
 
-    context = {'form': form}
+    context = {'form': form, 'pk': task.id, 'tasks': tasks}
 
     return render(request, 'tasks/update_task.html', context)
 

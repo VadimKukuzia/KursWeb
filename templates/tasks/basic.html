@@ -13,11 +13,17 @@
 	body{
 		background-color: #638CB8;
 	}
+    textarea {
+        overflow: auto;
+        resize: vertical;
+            width: 98%;
+        height: 100px;
+    }
 
 	input{
-		width: 100%;
+
 		padding: 12px 20px;
-		margin: 8px 0;
+		margin: 8px;
 		box-sizing: border-box;
 	}
 
@@ -49,31 +55,55 @@
         display: flex;
         flex-direction: row;
 	}
-    .left{
-        padding: 15px;
+    .right {
+        padding: 2%;
         border-radius: 3px;
         color: #fff;
         font-size: 16px;
         position: static;
-        align-self: auto;
-        margin: inherit;
-
-    }
-    .right{
-        padding: 15px;
-        border-radius: 3px;
-        color: #fff;
-        font-size: 16px;
-        position: static;
-        align-self: auto;
+        align-self: center;
         margin: inherit;
         margin-inline-start: auto;
+        align-items: center;
+    }
+    .left {
+        padding: 2%;
+        border-radius: 3px;
+        color: #fff;
+        font-size: 16px;
+        position: static;
+        align-self: auto;
+        margin: inherit;
+        display: flex;
+        align-items: center;
+    }
+
+    .left2 {
+        padding: 2%;
+        border-radius: 3px;
+        color: #fff;
+        font-size: 16px;
+        position: static;
+        align-self: auto;
+        margin: auto    ;
+        display: flex;
+        align-items: center;
     }
 
 	.btn-danger{
 		background-color: #ffae19;
 		border-color: #e59400;
 	}
+    .form-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -5px;
+    /* margin-left: -5px; */
+    flex: auto;
+}
 
 </style>
 
@@ -82,7 +112,7 @@
 <body class="bg-light">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">MyNotes</a>
+    <a class="navbar-brand" href="{% url 'index' %}">MyNotes</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
             aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -99,32 +129,8 @@
 
 <div class="container-fluid">
     <div class="center-column">
-
-        <form method="POST" action="/">
-            {% csrf_token %}
-            {{form.title}}
-            <input class="btn btn-info" type="submit" name="Create Task">
-        </form>
-
-        <div class="todo-list">
-            {% for task in tasks %}
-                <div class="item-row">
-                    <div class="left">
-                        {% if task.complete == True %}
-                        <strike>{{ loop.nextitem.id }}. {{task}}</strike>
-                        {% else %}
-                        <span>{{ loop.index }}. {{task}}</span>
-                        {% endif %}
-                    </div>
-                    <div class="right">
-                        <a class="btn btn-sm btn-info" href="{% url 'update_task' task.id %}">Update</a>
-                        <a class="btn btn-sm btn-danger" href="{% url 'delete_task' task.id %}">Delete</a>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+        {% block main %}{% endblock %}
     </div>
-    {% block main %}{% endblock %}
 </div>
 
 <!-- Optional JavaScript -->
