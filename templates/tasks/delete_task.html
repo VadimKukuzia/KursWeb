@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Deleting Task</title>
+    <meta http-equiv="refresh" content="0;URL={% url 'index' %}" />
 </head>
 <body>
-    <h3>Are u sure want to delete "{{ task }}"</h3>
-    <a href="{% url 'index' %}">Cancel</a>
-    <form method="post" action="">
-        {% csrf_token %}
+
         <input type="submit" name="Confirm">
-    </form>
+
 </body>
 </html>

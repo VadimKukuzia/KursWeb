@@ -4,34 +4,50 @@
     Добавление заметки
 {% endblock %}
 {% block main %}
-    Тут будет окно добавления
-{% endblock %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Index</title>
-</head>
-<body class="center-column">
-    <h3 align="center">Your list</h3>
-    <form method="post" action="/">
+    <form method="POST" action="/">
         {% csrf_token %}
-        {{ form.title }}
-        <input class="btn btn-info" type="submit" name="Create Task">
+        {{form.title}}
+        <input class="btn btn-info" type="submit" name="Create Task" >
     </form>
     <div class="todo-list">
-        {% for task in tasks %}
-            <div class="item-row">
-
-                {% if task.complete == True %}
-                <strike>{{ task }}</strike>
-                {% else %}
-                <span>{{ task }}</span>
-                {% endif %}
-                <a class="btn btn-sm btn-info" href="{% url 'update_task' task.id %}">Update</a>
-                <a class="btn btn-sm btn-danger" href="{% url 'delete_task' task.id %}">Delete</a>
-            </div>
-        {% endfor %}
-    </div>
-</body>
-</html>
+            {% for task in tasks %}
+                <div class="item-row">
+                    <div class="left">
+                        {% if task.complete == True %}
+                        <strike>{{ forloop.counter }}. {{task}}</strike>
+                        {% else %}
+                        <span>{{ forloop.counter }}. {{task}}</span>
+                        {% endif %}
+                    </div>
+                    <div class="right">
+                        <a class="btn btn-sm btn-info" href="{% url 'update_task' task.id %}">Обновить</a>
+                        <!-- Button trigger modal -->
+                        <a href="{% url 'delete_task' task.id %}" type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
+                          Удалить
+                        </a>
+                        <TODO>Доделать удаление</TODO>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle" style="color: black">Подтверждение действия</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <p style="color: black">Вы уверены действительно хотите удалить запись "{{ task }}"?</p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+{% endblock %}
