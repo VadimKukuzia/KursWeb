@@ -10,44 +10,46 @@
         <input class="btn btn-info" type="submit" name="Create Task" >
     </form>
     <div class="todo-list">
-            {% for task in tasks %}
-                <div class="item-row">
-                    <div class="left">
-                        {% if task.complete == True %}
-                        <strike>{{ forloop.counter }}. {{task}}</strike>
-                        {% else %}
-                        <span>{{ forloop.counter }}. {{task}}</span>
-                        {% endif %}
-                    </div>
-                    <div class="right">
-                        <a class="btn btn-sm btn-info" href="{% url 'update_task' task.id %}">Обновить</a>
-                        <!-- Button trigger modal -->
-                        <a href="{% url 'delete_task' task.id %}" type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
-                          Удалить
-                        </a>
-                        <TODO>Доделать удаление</TODO>
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        {% for task in tasks %}
+            <div class="item-row">
+                <div class="left">
+                    {% if task.complete == True %}
+                    <strike>{{ forloop.counter }}. {{task}}</strike>
+                    {% else %}
+                    <span>{{ forloop.counter }}. {{task}}</span>
+                    {% endif %}
+                </div>
+                <div class="right">
+                    <a class="btn btn-sm btn-info" href="{% url 'update_task' task.id %}">Обновить</a>
+                    <a href="{% url 'delete_task' task.id %}" class="btn btn-sm btn-danger" data-actions-icnt="{{ task }}" data-toggle="modal" data-target="#{{ task }}">
+                      Удалить
+                    </a>
+                    <div class="modal fade" id="{{ task }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                           <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle" style="color: black">Подтверждение действия</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                <p style="color: black">Вы уверены действительно хотите удалить запись "{{ task }}"?</p>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                              </div>
-                            </div>
+                                <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLongTitle" style="color: black">Подтверждение действия</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                          </button>
+                                      </div>
+                                      <div class="modal-body">
+                                          <form>
+                                              <p style="color: black" id="task">Вы уверены действительно хотите удалить запись "{{ task }}"?</p>
+                                          </form>
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                          <form method="post" action="{% url 'delete_task' task.id %}">
+                                              {% csrf_token %}
+                                              <input type="submit" class="btn btn-primary" value="Удалить">
+                                          </form>
+                                      </div>
+                                </div>
                           </div>
-                        </div>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -7,7 +7,7 @@ from .forms import *
 
 def index(request):
     tasks = Task.objects.all().order_by('id')
-    ids = Task.objects.values_list('id')
+
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
@@ -15,7 +15,7 @@ def index(request):
         return redirect('/')
 
     form = TaskForm()
-    context = {'tasks': tasks, 'form': form, 'ids': ids}
+    context = {'tasks': tasks, 'form': form}
     return render(request, 'tasks/index.html', context)
 
 
@@ -43,5 +43,4 @@ def delete_task(request, pk):
         task.delete()
         return redirect('/')
 
-    context = {'task': task}
-    return render(request, 'tasks/delete_task.html', context)
+    return redirect('/')
