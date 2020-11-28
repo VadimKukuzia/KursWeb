@@ -1,0 +1,25 @@
+{% extends 'tasks/basic.html' %}
+
+{% block title %}
+    Списки
+{% endblock %}
+{% block list_button %}
+    <div class="dropdown-menu" style="">
+        {% for list in lists %}
+            <a class="dropdown-item" href="{% url 'tasks' list.id %}">{{ list }}</a>
+        {% endfor %}
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item">
+            <form method="POST" action="/">
+              {% csrf_token %}
+              {{form.title}}
+              <input class="btn btn-info" type="submit" name="Create TaskList" >
+            </form>
+        </a>
+    </div>
+{% endblock %}
+{% block main %}
+    <div class="alert alert-primary" role="alert" >
+      Зайдите в выпадающие меню "Списки" и создайте первый список!
+    </div>
+{% endblock %}

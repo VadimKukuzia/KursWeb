@@ -4,21 +4,30 @@
 {% block title %}
     Обновление заметки
 {% endblock %}
-{% block main %}
-    <div class="todo-list">
-            <div class="item-row">
-                    <form method="post" action="" class="form-row">
-                        <div class="left">
-                            {% csrf_token %}
-                            {{ form.title }}
-                            {{ form.complete }}
-                        </div>
-                        <div class="right">
-                            <input class="btn btn-sm btn-info" type="submit" name="Update Task">
-                        </div>
-                    </form>
-            </div>
+{% block list_button %}
+    <div class="dropdown-menu" style="">
+        {% for list in lists %}
+            <a class="dropdown-item" href="{% url 'tasks' list.id %}">{{ list }}</a>
+        {% endfor %}
     </div>
+{% endblock %}
+{% block main %}
+<div class="center-column">
+    <div class="todo-list">
+        <div class="item-row">
+            <form method="post" action="" class="form-row">
+                <div class="left">
+                    {% csrf_token %}
+                    {{ form.title }}
+                    {{ form.complete }}
+                </div>
+                <div class="right">
+                    <input class="btn btn-sm btn-info" type="submit" name="Update Task">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 
