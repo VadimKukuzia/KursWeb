@@ -15,11 +15,17 @@
 {% endblock %}
 {% block main %}
 <div class="center-column">
-    <form method="POST" action="{% url 'add_task' list.id %}">
-        {% csrf_token %}
-        {{form.title}}
-        <input class="btn btn-info" type="submit" name="Create Task" >
-    </form>
+<form method="POST" action="{% url 'add_task' list.id %}" >
+    <div class="item-row">
+        <div class="left2">
+            {% csrf_token %}
+            {{form.title}}
+        </div>
+        <div class="right">
+            <input class="btn btn-info" type="submit" name="Create Task" value="Создать">
+        </div>
+    </div>
+</form>
     <div class="todo-list">
         {% for task in tasks %}
             <div class="item-row">

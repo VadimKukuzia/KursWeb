@@ -15,4 +15,4 @@ class TaskListForm(forms.ModelForm):
 
     class Meta:
         model = TaskList
-        fields = '__all__'
+        fields = ['title']

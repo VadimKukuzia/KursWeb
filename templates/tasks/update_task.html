@@ -13,22 +13,19 @@
 {% endblock %}
 {% block main %}
 <div class="center-column">
-    <div class="todo-list">
+    <form method="POST" action="" >
         <div class="item-row">
-            <form method="post" action="" class="form-row">
-                <div class="left">
-                    {% csrf_token %}
-                    {{ form.title }}
-                    {{ form.complete }}
-                </div>
-                <div class="right">
-                    <input class="btn btn-sm btn-info" type="submit" name="Update Task">
-                </div>
-            </form>
+            <div class="left2">
+                {% csrf_token %}
+                {{ form.title }}
+                {{ form.complete }}
+            </div>
+            <div class="right">
+                <input class="btn btn-sm btn-info" type="submit" name="Update Task" value="Обновить">
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 {% endblock %}
-
 
 

@@ -16,12 +16,11 @@
     textarea {
         overflow: auto;
         resize: vertical;
-            width: 98%;
-        height: 100px;
+        height: 80px;
+        width: inherit;
     }
 
 	input{
-
 		padding: 12px 20px;
 		margin: 8px;
 		box-sizing: border-box;
@@ -85,9 +84,10 @@
         font-size: 16px;
         position: static;
         align-self: auto;
-        margin: auto    ;
+        margin: inherit;
         display: flex;
         align-items: center;
+        width: 90%;
     }
 
 	.btn-danger{
@@ -129,7 +129,6 @@
                       Список
                     </button>
                     {% block list_button %}
-
                     {% endblock %}
                   </div>
             </li>
