@@ -6,22 +6,42 @@ from .forms import *
 
 
 def index(request):
-    tasks = Task.objects.all().order_by('id')
+    lists = TaskList.objects.all().order_by('id')
 
     if request.method == 'POST':
-        form = TaskForm(request.POST)
+        form = TaskListForm(request.POST)
         if form.is_valid():
             form.save()
         return redirect('/')
 
+    form = TaskListForm()
+    context = {'lists': lists, 'form': form}
+    return render(request, 'tasks/lists.html', context)
+
+
+def list_tasks(request, list_id):
+    tasks = Task.objects.filter(task_list_id=list_id).order_by('id')
+    lists = TaskList.objects.all().order_by('id')
+
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.task_list = TaskList.objects.get(id=list_id)
+            instance.save()
+        else:
+            print("Форма не валидна")
+        return redirect(f'/{list_id}/tasks')
+
     form = TaskForm()
-    context = {'tasks': tasks, 'form': form}
-    return render(request, 'tasks/index.html', context)
+    context = {'tasks': tasks, 'form': form, 'lists': lists, 'list': TaskList.objects.get(id=list_id)}
+    return render(request, 'tasks/task_list.html', context)
 
 
-def update_task(request, pk):
+def update_task(request, pk, list_id):
     task = Task.objects.get(id=pk)
     tasks = Task.objects.all().order_by('id')
+    lists = TaskList.objects.all().order_by('id')
 
     form = TaskForm(instance=task)
 
@@ -29,18 +49,18 @@ def update_task(request, pk):
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect(f'/{list_id}/tasks')
 
-    context = {'form': form, 'pk': task.id, 'tasks': tasks}
+    context = {'form': form, 'pk': task.id, 'tasks': tasks, 'lists': lists}
 
     return render(request, 'tasks/update_task.html', context)
 
 
-def delete_task(request, pk):
+def delete_task(request, pk, list_id):
     task = Task.objects.get(id=pk)
 
     if request.method == 'POST':
         task.delete()
-        return redirect('/')
+        return redirect(f'/{list_id}/tasks')
 
-    return redirect('/')
+    return redirect(f'/{list_id}/tasks')

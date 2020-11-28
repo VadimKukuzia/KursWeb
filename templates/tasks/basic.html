@@ -121,16 +121,27 @@
     <div class="collapse navbar-collapse" id="navbarsExample05">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Главная <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{% url 'index' %}">Главная <span class="sr-only">(current)</span></a>
+            </li>
+            <li>
+                <div class="btn-group dropright">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Список
+                    </button>
+                    {% block list_button %}
+
+                    {% endblock %}
+                  </div>
             </li>
         </ul>
     </div>
+    {% block list_name %}
+    
+    {% endblock %}
 </nav>
 
 <div class="container-fluid">
-    <div class="center-column">
-        {% block main %}{% endblock %}
-    </div>
+    {% block main %}{% endblock %}
 </div>
 
 <!-- Optional JavaScript -->
