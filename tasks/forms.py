@@ -10,6 +10,10 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ['title', 'complete']
 
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
 
 class TaskListForm(forms.ModelForm):
 

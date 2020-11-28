@@ -8,7 +8,7 @@
         {% for list in lists %}
             <div style="display: flex; margin: 5px">
                 <a class="dropdown-item" href="{% url 'tasks' list.id %}">{{ list }}</a>
-                <form method="post" action="{% url 'delete_list' list.id %}">
+                <form method="post" action="{% url 'delete-list' list.id %}">
                     {% csrf_token %}
                     <input type="submit" class="btn btn-sm btn-danger" value="Удалить">
                 </form>
