@@ -15,11 +15,17 @@
 {% endblock %}
 {% block main %}
 <div class="center-column">
-    <form method="POST" action="{% url 'add_task' list.id %}">
-        {% csrf_token %}
-        {{form.title}}
-        <input class="btn btn-info" type="submit" name="Create Task" >
-    </form>
+<form method="POST" action="{% url 'add-task' list.id %}" >
+    <div class="item-row">
+        <div class="left2">
+            {% csrf_token %}
+            {{form.title}}
+        </div>
+        <div class="right">
+            <input class="btn btn-info" type="submit" name="Create Task" value="Создать">
+        </div>
+    </div>
+</form>
     <div class="todo-list">
         {% for task in tasks %}
             <div class="item-row">
@@ -31,8 +37,8 @@
                     {% endif %}
                 </div>
                 <div class="right">
-                    <a class="btn btn-sm btn-info" href="{% url 'update_task' list.id task.id %}">Обновить</a>
-                    <a href="{% url 'delete_task' list.id task.id %}" class="btn btn-sm btn-danger" data-actions-icnt="{{ task }}" data-toggle="modal" data-target="#{{ task }}">
+                    <a class="btn btn-sm btn-info" href="{% url 'update-task' list.id task.id %}">Обновить</a>
+                    <a href="{% url 'delete-task' list.id task.id %}" class="btn btn-sm btn-danger" data-actions-icnt="{{ task }}" data-toggle="modal" data-target="#{{ task }}">
                       Удалить
                     </a>
                     <div class="modal fade" id="{{ task }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -51,7 +57,7 @@
                                       </div>
                                       <div class="modal-footer">
                                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                                          <form method="post" action="{% url 'delete_task' list.id task.id %}">
+                                          <form method="post" action="{% url 'delete-task' list.id task.id %}">
                                               {% csrf_token %}
                                               <input type="submit" class="btn btn-primary" value="Удалить">
                                           </form>

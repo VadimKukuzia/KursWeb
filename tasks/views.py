@@ -19,6 +19,16 @@ def index(request):
     return render(request, 'tasks/lists.html', context)
 
 
+def delete_list(request, list_id):
+    task_list = TaskList.objects.get(id=list_id)
+
+    if request.method == 'POST':
+        task_list.delete()
+        return redirect('index')
+
+    return redirect('index')
+
+
 def list_tasks(request, list_id):
     tasks = Task.objects.filter(task_list_id=list_id).order_by('id')
     lists = TaskList.objects.all().order_by('id')
