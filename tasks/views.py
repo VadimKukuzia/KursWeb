@@ -1,8 +1,53 @@
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import *
 from .forms import *
 # Create your views here.
+
+
+def log_out(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('index')
+    return redirect('index')
+
+
+def sign_in(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request.POST, data=request.POST)
+        if form.is_valid():
+            if User.objects.filter(username=form.cleaned_data['username']).exists():
+                return render(request, 'tasks/sign_in.html', {
+                    'form': form,
+                    'error_message': 'Имя пользователя не совпадает'
+                })
+            elif User.objects.filter(password=form.cleaned_data['password']).exists():
+                return render(request, 'tasks/sign_in.html', {
+                    'form': form,
+                    'error_message': 'Пароли не совпадают'
+                })
+            else:
+                user = form.get_user()
+                login(request, user)
+                return redirect('index')
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'tasks/sign_in.html', {'form': form})
+
+
+def sign_up(request):
+
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, 'tasks/sign_up.html', {'form': form})
 
 
 def index(request):
@@ -15,7 +60,7 @@ def index(request):
         return redirect('/')
 
     form = TaskListForm()
-    context = {'lists': lists, 'form': form}
+    context = {'lists': lists, 'form': form, 'user': request.user}
     return render(request, 'tasks/lists.html', context)
 
 
