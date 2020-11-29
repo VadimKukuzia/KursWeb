@@ -21,6 +21,8 @@ class TaskListForm(forms.ModelForm):
 
 
 class UserRegistrationForm(UserCreationForm):
+    email = forms.EmailField(max_length=254, help_text='Обязательно к вводу, введите действующую электронную почту',
+                             required=True)
 
     class Meta:
         model = User

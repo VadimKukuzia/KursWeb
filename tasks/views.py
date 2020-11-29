@@ -1,8 +1,13 @@
+from django.conf.global_settings import EMAIL_HOST
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.core import mail
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from .forms import *
+
+
 # Create your views here.
 
 
@@ -14,7 +19,6 @@ def log_out(request):
 
 
 def sign_in(request):
-
     if request.method == 'POST':
         form = AuthenticationForm(request.POST, data=request.POST)
         if form.is_valid():
@@ -31,7 +35,6 @@ def sign_in(request):
 
 
 def sign_up(request):
-
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -119,3 +122,26 @@ def delete_task(request, pk, list_id):
         return redirect(f'/{list_id}/tasks')
 
     return redirect(f'/{list_id}/tasks')
+
+
+@login_required(login_url="/sign-in")
+def send_list_by_email(request, list_id):
+    task_list = TaskList.objects.get(id=list_id)
+    tasks = Task.objects.filter(task_list_id=list_id).order_by('id')
+    email = request.user.email
+    text = ''
+    for n, el in enumerate(tasks):
+        text += f'{n+1}. {el}\n'
+
+    if request.method == 'POST':
+        with mail.get_connection() as connection:
+            if send_mail(from_email=EMAIL_HOST,
+                         subject=f'Список заметок:{task_list}',
+                         recipient_list=[email],
+                         message=text,
+                         fail_silently=False,
+                         connection=connection) != 0:
+                messages.info(request, 'Письмо было успешно отправлено')
+                return redirect('index')
+
+    return redirect('index')
