@@ -142,6 +142,6 @@ def send_list_by_email(request, list_id):
                          fail_silently=False,
                          connection=connection) != 0:
                 messages.info(request, 'Письмо было успешно отправлено')
-                return redirect('index')
+                return redirect('tasks', list_id=list_id)
 
-    return redirect('index')
+    return redirect(f'tasks/{list_id}')
