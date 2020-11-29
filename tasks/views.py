@@ -1,21 +1,59 @@
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import *
 from .forms import *
 # Create your views here.
 
 
+def log_out(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('index')
+    return redirect('index')
+
+
+def sign_in(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request.POST, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('index')
+        else:
+            print('aaaa')
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'tasks/sign_in.html', {'form': form})
+
+
+def sign_up(request):
+
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, 'tasks/sign_up.html', {'form': form})
+
+
 def index(request):
-    lists = TaskList.objects.all().order_by('id')
+    lists = TaskList.objects.filter(user_id=request.user.id).order_by('id')
 
     if request.method == 'POST':
         form = TaskListForm(request.POST)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
         return redirect('/')
 
     form = TaskListForm()
-    context = {'lists': lists, 'form': form}
+    context = {'lists': lists, 'form': form, 'user': request.user}
     return render(request, 'tasks/lists.html', context)
 
 
@@ -31,7 +69,7 @@ def delete_list(request, list_id):
 
 def list_tasks(request, list_id):
     tasks = Task.objects.filter(task_list_id=list_id).order_by('id')
-    lists = TaskList.objects.all().order_by('id')
+    lists = TaskList.objects.filter(user_id=request.user.id).order_by('id')
 
     if request.method == 'POST':
         form = TaskForm(request.POST)
