@@ -1,10 +1,17 @@
+import os
+from sys import path
+
 from django.conf.global_settings import EMAIL_HOST
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core import mail
+from django.core.files import File
 from django.core.mail import send_mail
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
+
+from KursWeb import settings
 from .forms import *
 
 
@@ -141,7 +148,28 @@ def send_list_by_email(request, list_id):
                          message=text,
                          fail_silently=False,
                          connection=connection) != 0:
-                messages.info(request, 'Письмо было успешно отправлено')
+                messages.success(request, 'Письмо было успешно отправлено')
+                return redirect('tasks', list_id=list_id)
+            else:
+                messages.warning(request, 'Не удалость отправить.\nПопробуйте ещё раз')
                 return redirect('tasks', list_id=list_id)
 
-    return redirect(f'tasks/{list_id}')
+    return redirect('tasks', list_id=list_id)
+
+
+@login_required(login_url="/sign-in")
+def download_file(request, list_id):
+    task_list = TaskList.objects.get(id=list_id)
+    tasks = Task.objects.filter(task_list_id=list_id).order_by('id')
+    text = ''
+    for n, el in enumerate(tasks):
+        text += f'{n + 1}. {el}\n'
+
+    with open(f'{task_list}.txt', 'w') as file:
+        file.write(f'Список - {task_list}:\n{text}')
+    if request.method == 'POST':
+        return FileResponse(open(f'{task_list}.txt', 'rb'), as_attachment=True)
+
+    return redirect('tasks', list_id=list_id)
+
+
