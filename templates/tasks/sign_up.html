@@ -10,7 +10,7 @@
     <title>Регистрация пользователя</title>
     <style>
         .center-column2{
-		width: 600px;
+		width: 350px;
 		margin: 20px auto;
 		padding:20px;
 		background-color: #fff;
@@ -22,7 +22,7 @@
 <body class="bg-light">
 <div class="container-fluid">
     <div class="center-column2">
-        <form action="{% url 'sign-up' %}" method="post">
+        <form action="{% url 'sign-up' %}" method="post" style="text-align: center">
             {% csrf_token %}
             {% for field in form %}
                 <div class="form-group">
@@ -38,6 +38,9 @@
             {% endfor %}
             <input type="submit" value="Зарегистрироваться">
         </form>
+    <div class="item-row" style="margin: 5px; text-align: center">
+        <a>Уже есть аккаунт?</a><a href="{% url 'sign-in' %}">Войти</a>
+    </div>
     </div>
 </div>
 

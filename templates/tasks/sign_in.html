@@ -22,7 +22,7 @@
 <body class="bg-light">
 <div class="container-fluid">
     <div class="center-column2">
-        <form action="{% url 'sign-in' %}" class="needs-validation" method="post">
+        <form action="{% url 'sign-in' %}" method="post" style="text-align: center">
             {% csrf_token %}
             {% for field in form %}
                 <div class="form-group">
@@ -31,13 +31,16 @@
                     {% if field.help_text %}
                         <small class="form-text text-muted">{{ field.help_text }}</small>
                     {% endif %}
-                    {% for error in field.errors %}
-                        <p class="form-control" style="color: firebrick">{{ error }}</p>
-                    {% endfor %}
                 </div>
+            {% endfor %}
+            {% for message in messages %}
+                <p class="form-control" style="color: firebrick">{{ message }}</p>
             {% endfor %}
             <input type="submit" value="Войти">
         </form>
+    <div class="item-row" style="margin: 5px; text-align: center">
+        <a>Ещё нет аккаунта?</a><a href="{% url 'sign-up' %}">Зарегистрироваться</a>
+    </div>
     </div>
 </div>
 
