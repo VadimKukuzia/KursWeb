@@ -1,5 +1,6 @@
+from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import *
 # Create your views here.
@@ -13,6 +14,7 @@ def log_out(request):
 
 
 def sign_in(request):
+
     if request.method == 'POST':
         form = AuthenticationForm(request.POST, data=request.POST)
         if form.is_valid():
@@ -20,7 +22,8 @@ def sign_in(request):
             login(request, user)
             return redirect('index')
         else:
-            print('aaaa')
+            messages.info(request, 'Имя пользователя или пароль не совпадают')
+            return render(request, 'tasks/sign_in.html', {'form': form})
     else:
         form = AuthenticationForm()
 
@@ -57,6 +60,7 @@ def index(request):
     return render(request, 'tasks/lists.html', context)
 
 
+@login_required(login_url="/sign-in")
 def delete_list(request, list_id):
     task_list = TaskList.objects.get(id=list_id)
 
@@ -67,6 +71,7 @@ def delete_list(request, list_id):
     return redirect('index')
 
 
+@login_required(login_url="/sign-in")
 def list_tasks(request, list_id):
     tasks = Task.objects.filter(task_list_id=list_id).order_by('id')
     lists = TaskList.objects.filter(user_id=request.user.id).order_by('id')
@@ -86,6 +91,7 @@ def list_tasks(request, list_id):
     return render(request, 'tasks/task_list.html', context)
 
 
+@login_required(login_url="/sign-in")
 def update_task(request, pk, list_id):
     task = Task.objects.get(id=pk)
     tasks = Task.objects.all().order_by('id')
@@ -104,6 +110,7 @@ def update_task(request, pk, list_id):
     return render(request, 'tasks/update_task.html', context)
 
 
+@login_required(login_url="/sign-in")
 def delete_task(request, pk, list_id):
     task = Task.objects.get(id=pk)
 
