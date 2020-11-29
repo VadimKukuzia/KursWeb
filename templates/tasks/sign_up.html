@@ -22,7 +22,7 @@
 <body class="bg-light">
 <div class="container-fluid">
     <div class="center-column2">
-        <form action="{% url 'sign-up' %}" method="post" style="text-align: center">
+        <form action="{% url 'sign-up' %}" method="post">
             {% csrf_token %}
             {% for field in form %}
                 <div class="form-group">
