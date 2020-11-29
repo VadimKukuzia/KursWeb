@@ -78,11 +78,11 @@ WSGI_APPLICATION = 'KursWeb.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '...',
-        'USER': '...',
-        'PASSWORD': '...',
-        'HOST': '...',
-        'PORT': '...',
+        'NAME': 'dfesdlmk91leae',
+        'USER': 'nfzrigofzjhzvw',
+        'PASSWORD': '15b1aa061a506e7d533217548cb72ce3c2e4f8a4fabc9684e661bca6f3299546',
+        'HOST': 'ec2-54-217-206-236.eu-west-1.compute.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
