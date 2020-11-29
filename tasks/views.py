@@ -16,20 +16,11 @@ def sign_in(request):
     if request.method == 'POST':
         form = AuthenticationForm(request.POST, data=request.POST)
         if form.is_valid():
-            if User.objects.filter(username=form.cleaned_data['username']).exists():
-                return render(request, 'tasks/sign_in.html', {
-                    'form': form,
-                    'error_message': 'Имя пользователя не совпадает'
-                })
-            elif User.objects.filter(password=form.cleaned_data['password']).exists():
-                return render(request, 'tasks/sign_in.html', {
-                    'form': form,
-                    'error_message': 'Пароли не совпадают'
-                })
-            else:
-                user = form.get_user()
-                login(request, user)
-                return redirect('index')
+            user = form.get_user()
+            login(request, user)
+            return redirect('index')
+        else:
+            print('aaaa')
     else:
         form = AuthenticationForm()
 
@@ -51,12 +42,14 @@ def sign_up(request):
 
 
 def index(request):
-    lists = TaskList.objects.all().order_by('id')
+    lists = TaskList.objects.filter(user_id=request.user.id).order_by('id')
 
     if request.method == 'POST':
         form = TaskListForm(request.POST)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
         return redirect('/')
 
     form = TaskListForm()
@@ -76,7 +69,7 @@ def delete_list(request, list_id):
 
 def list_tasks(request, list_id):
     tasks = Task.objects.filter(task_list_id=list_id).order_by('id')
-    lists = TaskList.objects.all().order_by('id')
+    lists = TaskList.objects.filter(user_id=request.user.id).order_by('id')
 
     if request.method == 'POST':
         form = TaskForm(request.POST)

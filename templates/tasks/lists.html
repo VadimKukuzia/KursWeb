@@ -32,7 +32,12 @@
 {% block main %}
     <div class="center-column">
         <div class="alert alert-primary" role="alert" >
-            Зайдите в выпадающие меню "Мои списки" и создайте первый список!
+            {% if user.is_authenticated %}
+                Зайдите в выпадающие меню "Мои списки" и создайте первый список!
+            {% else %}
+                Зарегистрируйтесь или войдите, чтобы начать
+            {% endif %}
+
         </div>
     </div>
 {% endblock %}
