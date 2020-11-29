@@ -7,6 +7,7 @@ urlpatterns = [
     path('sign-in', views.sign_in, name="sign-in"),
     path('log-out', views.log_out, name="log-out"),
     path('<str:list_id>/send-via-email', views.send_list_by_email, name="send-via-email"),
+    path('<str:list_id>/download', views.download_file, name="download"),
     path('<str:list_id>/tasks', views.list_tasks, name="tasks"),
     path('<str:list_id>/tasks', views.list_tasks, name="add-task"),
     path('delete-list/<str:list_id>/', views.delete_list, name="delete-list"),
