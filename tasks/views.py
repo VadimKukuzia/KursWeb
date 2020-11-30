@@ -159,18 +159,22 @@ def send_list_by_email(request, list_id):
             text += f'{n + 1}. {el}\n'
 
     if request.method == 'POST':
-        with mail.get_connection() as connection:
-            if send_mail(from_email=EMAIL_HOST,
-                         subject=f'Список заметок:{task_list}',
-                         recipient_list=[email],
-                         message=text,
-                         fail_silently=False,
-                         connection=connection) != 0:
-                messages.success(request, f'Письмо со списком "{task_list}" было успешно отправлено на почту {email}')
-                return redirect('tasks', list_id=list_id)
-            else:
-                messages.warning(request, 'Не удалость отправить.\nПопробуйте ещё раз')
-                return redirect('tasks', list_id=list_id)
+        if tasks.count() > 0:
+            with mail.get_connection() as connection:
+                if send_mail(from_email=EMAIL_HOST,
+                             subject=f'Список заметок:{task_list}',
+                             recipient_list=[email],
+                             message=text,
+                             fail_silently=False,
+                             connection=connection) != 0:
+                    messages.success(request, f'Письмо со списком "{task_list}" было успешно отправлено на почту {email}')
+                    return redirect('tasks', list_id=list_id)
+                else:
+                    messages.warning(request, 'Не удалость отправить.\nПопробуйте ещё раз')
+                    return redirect('tasks', list_id=list_id)
+        else:
+            messages.warning(request, 'Список пуст')
+            return redirect('tasks', list_id=list_id)
 
     return redirect('tasks', list_id=list_id)
 
