@@ -1,1 +1,1 @@
-web: gunicorn my-note.wsgi --log-file -
+web: gunicorn KursWeb.wsgi --log-file -
