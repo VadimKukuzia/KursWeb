@@ -193,7 +193,11 @@ def download_file(request, list_id):
     with open(f'{task_list}.txt', 'w') as file:
         file.write(f'Список - {task_list}:\n{text}')
     if request.method == 'POST':
-        return FileResponse(open(f'{task_list}.txt', 'rb'), as_attachment=True)
+        if tasks.count() > 0:
+            return FileResponse(open(f'{task_list}.txt', 'rb'), as_attachment=True)
+        else:
+            messages.warning(request, 'Список пуст')
+            return redirect('tasks', list_id=list_id)
 
     os.remove(f'{task_list}.txt')
     return redirect('tasks', list_id=list_id)
