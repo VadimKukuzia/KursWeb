@@ -3,15 +3,6 @@
 {% block title %}
     Добавление заметки
 {% endblock %}
-{% block list_button %}
-    <div class="dropdown-menu" style="">
-        {% for list in lists %}
-            <div style="display: flex; margin: 5px">
-                <a class="dropdown-item" href="{% url 'tasks' list.id %}">{{ list }}</a>
-            </div>
-        {% endfor %}
-    </div>
-{% endblock %}
 {% block list_name %}
     <a class="row justify-content-center" style="color: black;flex: auto;font-size: x-large;
     font-style: oblique;"> Список: {{ list }}</a>

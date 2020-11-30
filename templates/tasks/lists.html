@@ -3,34 +3,12 @@
 {% block title %}
     Списки
 {% endblock %}
-{% block list_button %}
-    <div class="dropdown-menu">
-        {% for list in lists %}
-            <div style="display: flex; margin: 5px">
-                <a class="dropdown-item" href="{% url 'tasks' list.id %}">{{ list }}</a>
-                <form method="post" action="{% url 'delete-list' list.id %}">
-                    {% csrf_token %}
-                    <input type="submit" class="btn btn-sm btn-danger" value="Удалить">
-                </form>
-            </div>
-        {% endfor %}
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item">Создать новый:</a>
-        <a class="dropdown-item">
-            <form method="POST" action="/">
-              {% csrf_token %}
-              {{form.title}}
-              <input class="btn btn-info" type="submit" name="Create TaskList" value="Создать">
-            </form>
-        </a>
-    </div>
-{% endblock %}
 
 {% block main %}
-    <div class="center-column">
+    <div class="center-column" style="text-align: center;">
         <div class="alert alert-primary" role="alert" >
             {% if user.is_authenticated %}
-                Зайдите в выпадающие меню "Мои списки" и создайте первый список!
+                Ваши списки находятся во вкладке "Мои списки"
             {% else %}
                 Зарегистрируйтесь или войдите, чтобы начать
             {% endif %}

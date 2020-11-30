@@ -17,47 +17,64 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body class="bg-light">
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="{% url 'index' %}">MyNotes</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
-            aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{% url 'index' %}">Главная <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{% url 'index' %}" style="margin: 5px">Главная <span class="sr-only">(current)</span></a>
             </li>
             {% if user.is_authenticated %}
             <li>
-                <div class="btn-group dropright">
+                <div class="btn-group dropright" style="margin: 5px">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Мои списки
                     </button>
-                    {% block list_button %}
-                    {% endblock %}
+                    <div class="dropdown-menu" style="width: max-content;">
+                        {% for list in lists %}
+                            <div style="display: flex; margin: 5px">
+                                <a class="dropdown-item" href="{% url 'tasks' list.id %}">{{ list }}</a>
+                                <form method="post" action="{% url 'delete-list' list.id %}">
+                                    {% csrf_token %}
+                                    <input type="submit" class="btn btn-sm btn-danger" value="Удалить">
+                                </form>
+                            </div>
+                        {% endfor %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item">Создать новый:</a>
+                        <a class="dropdown-item">
+                            <form method="POST" action="/" style="display: flex; margin: 5px">
+                              {% csrf_token %}
+                              {{form.title}}
+                              <input class="btn btn-info" type="submit" name="Create TaskList" value="Создать">
+                            </form>
+                        </a>
+                    </div>
                   </div>
             </li>
             {% endif %}
         </ul>
         {% if user.is_authenticated %}
-        <a style="color: white; margin-right: 1%">Пользователь: {{ user.username }}</a>,
-        <div class="btn-ground">
+        <a style="color: white; margin-right: 1%" >Пользователь: {{ user.username }}</a>,
+        <div class="btn-ground" style="margin: 5px">
             <form action="{% url 'log-out' %}" method="post">
                 {% csrf_token %}
                 <input type="submit" class="btn btn-secondary" value="Выйти">
             </form>
         </div>
-    {% else %}
-        <div class="btn-group" role="group" aria-label="Basic example">
+        {% else %}
+        <div class="btn-group" role="group" aria-label="Basic example" style="margin: 5px">
             <a type="button" class="btn btn-secondary" style="color: white" href="{% url 'sign-up' %}">Зарегистрироваться</a>
             <a type="button" class="btn btn-secondary" style="color: white" href="{% url 'sign-in' %}">Войти</a>
         </div>
-    {% endif %}
+        {% endif %}
     </div>
-
 </nav>
 
 <div class="container-fluid">
