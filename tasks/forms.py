@@ -32,9 +32,9 @@ class UserRegistrationForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
+        user_count = User.objects.filter(email=email).count()
         if '.ru' or '.com' or '.ua' not in email:
             raise forms.ValidationError('Введите корректный адрес')
-        user_count = User.objects.filter(email=email).count()
-        if user_count > 0:
+        elif user_count > 0:
             raise forms.ValidationError('Такая электронная почта уже есть в базе данных')
         return email
