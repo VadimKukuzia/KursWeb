@@ -12,7 +12,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet", type="text/css" href="{% static '/css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
 
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -27,18 +27,15 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'index' %}" style="margin: 5px">Главная <span class="sr-only">(current)</span></a>
-            </li>
             {% if user.is_authenticated %}
             <li>
-                <div class="btn-group dropright" style="margin: 5px">
+                <div class="btn-group dropright" style="margin: 3px">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Мои списки
                     </button>
                     <div class="dropdown-menu" style="width: max-content;">
                         {% for list in lists %}
-                            <div style="display: flex; margin: 5px">
+                            <div style="display: flex; margin: 3px">
                                 <a class="dropdown-item" href="{% url 'tasks' list.id %}">{{ list }}</a>
                                 <form method="post" action="{% url 'delete-list' list.id %}">
                                     {% csrf_token %}
@@ -49,7 +46,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item">Создать новый:</a>
                         <a class="dropdown-item">
-                            <form method="POST" action="/" style="display: flex; margin: 5px">
+                            <form method="POST" action="/" style="display: flex; margin: 3px">
                               {% csrf_token %}
                               {{form.title}}
                               <input class="btn btn-info" type="submit" name="Create TaskList" value="Создать">
@@ -61,15 +58,15 @@
             {% endif %}
         </ul>
         {% if user.is_authenticated %}
-        <a style="color: white; margin-right: 1%" >Пользователь: {{ user.username }}</a>,
-        <div class="btn-ground" style="margin: 5px">
+        <a style="color: white; margin-right: 1%" >Пользователь: {{ user.username }}</a>
+        <div class="btn-ground" style="margin: 3px">
             <form action="{% url 'log-out' %}" method="post">
                 {% csrf_token %}
                 <input type="submit" class="btn btn-secondary" value="Выйти">
             </form>
         </div>
         {% else %}
-        <div class="btn-group" role="group" aria-label="Basic example" style="margin: 5px">
+        <div class="btn-group" role="group" aria-label="Basic example" style="margin: 3px">
             <a type="button" class="btn btn-secondary" style="color: white" href="{% url 'sign-up' %}">Зарегистрироваться</a>
             <a type="button" class="btn btn-secondary" style="color: white" href="{% url 'sign-in' %}">Войти</a>
         </div>

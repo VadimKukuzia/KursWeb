@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.core.validators import EmailValidator
+
 from .models import *
 
 
@@ -27,3 +29,12 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if '.ru' or '.com' or '.ua' not in email:
+            raise forms.ValidationError('Введите корректный адрес')
+        user_count = User.objects.filter(email=email).count()
+        if user_count > 0:
+            raise forms.ValidationError('Такая электронная почта уже есть в базе данных')
+        return email

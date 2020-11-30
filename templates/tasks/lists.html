@@ -1,11 +1,11 @@
 {% extends 'tasks/basic.html' %}
 
 {% block title %}
-    Списки
+    Главная
 {% endblock %}
 
 {% block main %}
-    <div class="center-column" style="text-align: center;">
+    <div class="row" style="text-align: center; flex-flow: column; margin: 20px;">
         <div class="alert alert-primary" role="alert" >
             {% if user.is_authenticated %}
                 Ваши списки находятся во вкладке "Мои списки"

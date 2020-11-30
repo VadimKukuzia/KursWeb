@@ -63,7 +63,7 @@ def index(request):
             instance = form.save(commit=False)
             instance.user = request.user
             instance.save()
-        return redirect('/')
+            return redirect('tasks', list_id=instance.id)
 
     form = TaskListForm()
     context = {'lists': lists, 'form': form, 'user': request.user}
