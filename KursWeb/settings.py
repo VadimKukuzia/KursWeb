@@ -26,7 +26,11 @@ SECRET_KEY = '...'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'https://my-note.herokuapp.com', '0.0.0.0', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1',
+                 'https://my-note.herokuapp.com',
+                 '0.0.0.0',
+                 'localhost',
+                 'my-note.herokuapp.com']
 
 
 # Application definition
