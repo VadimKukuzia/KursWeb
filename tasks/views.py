@@ -5,6 +5,7 @@ from django.conf.global_settings import EMAIL_HOST
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserChangeForm
 from django.core import mail
 from django.core.files import File
 from django.core.mail import send_mail
@@ -68,6 +69,20 @@ def index(request):
     form = TaskListForm()
     context = {'lists': lists, 'form': form, 'user': request.user}
     return render(request, 'tasks/lists.html', context)
+
+
+def update_email(request):
+    lists = TaskList.objects.filter(user_id=request.user.id).order_by('id')
+    form = UserEmailEditForm(instance=request.user)
+
+    if request.method == 'POST':
+        form = UserEmailEditForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+
+    return render(request, 'tasks/update-email.html', {'form': form, 'lists':lists})
 
 
 @login_required(login_url="/sign-in")
@@ -138,7 +153,10 @@ def send_list_by_email(request, list_id):
     email = request.user.email
     text = ''
     for n, el in enumerate(tasks):
-        text += f'{n+1}. {el}\n'
+        if el.complete:
+            text += f'{n + 1}. {el} — Х\n'
+        else:
+            text += f'{n + 1}. {el}\n'
 
     if request.method == 'POST':
         with mail.get_connection() as connection:
@@ -163,13 +181,15 @@ def download_file(request, list_id):
     tasks = Task.objects.filter(task_list_id=list_id).order_by('id')
     text = ''
     for n, el in enumerate(tasks):
-        text += f'{n + 1}. {el}\n'
+        if el.complete:
+            text += f'{n + 1}. {el} — Х\n'
+        else:
+            text += f'{n + 1}. {el}\n'
 
     with open(f'{task_list}.txt', 'w') as file:
         file.write(f'Список - {task_list}:\n{text}')
     if request.method == 'POST':
         return FileResponse(open(f'{task_list}.txt', 'rb'), as_attachment=True)
 
+    os.remove(f'{task_list}.txt')
     return redirect('tasks', list_id=list_id)
-
-

@@ -4,6 +4,12 @@
     Главная
 {% endblock %}
 
+
+{% block email %}
+    <a class="btn btn-sm btn-info" href="{% url 'update-email' %}">Редактировать почту</a>
+{% endblock %}
+
+
 {% block main %}
     <div class="row" style="text-align: center; flex-flow: column; margin: 20px;">
         <div class="alert alert-primary" role="alert" >

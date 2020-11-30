@@ -27,42 +27,14 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            {% if user.is_authenticated %}
-            <li>
-                <div class="btn-group dropright" style="margin: 3px">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Мои списки
-                    </button>
-                    <div class="dropdown-menu" style="width: max-content;">
-                        {% for list in lists %}
-                            <div style="display: flex; margin: 3px">
-                                <a class="dropdown-item" href="{% url 'tasks' list.id %}">{{ list }}</a>
-                                <form method="post" action="{% url 'delete-list' list.id %}">
-                                    {% csrf_token %}
-                                    <input type="submit" class="btn btn-sm btn-danger" value="Удалить">
-                                </form>
-                            </div>
-                        {% endfor %}
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item">Создать новый:</a>
-                        <a class="dropdown-item">
-                            <form method="POST" action="/" style="display: flex; margin: 3px">
-                              {% csrf_token %}
-                              {{form.title}}
-                              <input class="btn btn-info" type="submit" name="Create TaskList" value="Создать">
-                            </form>
-                        </a>
-                    </div>
-                  </div>
-            </li>
-            {% endif %}
+
         </ul>
         {% if user.is_authenticated %}
             <div style="color: white; margin-right: 1%">
                 <a>Пользователь: {{ user.username }}</a><br>
                 <a>Почта: {{ user.email }}</a><br>
                 {% block email %}
-                
+
                 {% endblock %}
             </div>
             <div class="btn-ground" style="margin: 3px">
@@ -81,10 +53,26 @@
 </nav>
 
 <div class="container-fluid">
-    {% block list_name %}
-
-    {% endblock %}
-    {% block main %}{% endblock %}
+    <div class="container-fluid">
+    <div style="width: 300px;
+		margin: 20px auto;
+		padding:20px;
+		background-color: #fff;
+		border-radius: 3px;
+		box-shadow: 6px 2px 30px 0px rgba(0,0,0,0.75);">
+        <form action="{% url 'update-email' %}" method="post" style="text-align: center">
+            {% csrf_token %}
+                <div class="form-group">
+                    {{ form.email.title }}
+                    {{ form.email }}<br>
+                </div>
+            {% for error in form.email.errors %}
+                <p class="form-control" style="color: firebrick">{{ error }}</p>
+            {% endfor %}
+            <input type="submit" value="Редактировать">
+        </form>
+    </div>
+</div>
 </div>
 
 <!-- Optional JavaScript -->
@@ -100,3 +88,4 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
+
