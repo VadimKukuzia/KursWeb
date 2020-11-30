@@ -148,7 +148,7 @@ def send_list_by_email(request, list_id):
                          message=text,
                          fail_silently=False,
                          connection=connection) != 0:
-                messages.success(request, 'Письмо было успешно отправлено')
+                messages.success(request, f'Письмо со списком "{task_list}" было успешно отправлено на почту {email}')
                 return redirect('tasks', list_id=list_id)
             else:
                 messages.warning(request, 'Не удалость отправить.\nПопробуйте ещё раз')
