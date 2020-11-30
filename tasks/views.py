@@ -105,7 +105,7 @@ def list_tasks(request, list_id):
 def update_task(request, pk, list_id):
     task = Task.objects.get(id=pk)
     tasks = Task.objects.all().order_by('id')
-    lists = TaskList.objects.all().order_by('id')
+    lists = TaskList.objects.filter(user_id=request.user.id).order_by('id')
 
     form = TaskForm(instance=task)
 
