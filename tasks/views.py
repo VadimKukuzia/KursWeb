@@ -101,6 +101,11 @@ def list_tasks(request, list_id):
     tasks = Task.objects.filter(task_list_id=list_id).order_by('id')
     lists = TaskList.objects.filter(user_id=request.user.id).order_by('id')
 
+    if not any(int(list_id) == el.id for el in lists):
+        tasks = []
+        messages.warning(request, 'У вас нет такого списка')
+        return redirect('index')
+
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():

@@ -19,5 +19,12 @@
                 Зарегистрируйтесь или войдите, чтобы начать
             {% endif %}
         </div>
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    <p class="form-control" style="margin: 5px" >{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
