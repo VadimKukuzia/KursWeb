@@ -203,5 +203,4 @@ def download_file(request, list_id):
             messages.warning(request, 'Список пуст')
             return redirect('tasks', list_id=list_id)
 
-    os.remove(f'{task_list}.txt')
     return redirect('tasks', list_id=list_id)
