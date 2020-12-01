@@ -102,7 +102,6 @@ def list_tasks(request, list_id):
     lists = TaskList.objects.filter(user_id=request.user.id).order_by('id')
 
     if not any(int(list_id) == el.id for el in lists):
-        tasks = []
         messages.warning(request, 'У вас нет такого списка')
         return redirect('index')
 
