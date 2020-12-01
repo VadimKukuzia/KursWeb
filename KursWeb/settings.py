@@ -128,7 +128,6 @@ USE_TZ = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'mynotesmessage@gmail.com'
-EMAIL_HOST_PASSWORD = '1q2w3e4r5t#'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
