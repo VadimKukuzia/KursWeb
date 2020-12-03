@@ -3,6 +3,7 @@ from django.conf.global_settings import EMAIL_HOST
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.core import mail
 from django.core.mail import send_mail
 from django.http import FileResponse
